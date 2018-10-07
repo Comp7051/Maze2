@@ -19,7 +19,6 @@ public class Cheats : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Y)/* || Input.GetAxis(ZAxis) > 0*/)
         {
             isActive = !isActive;
-            Debug.Log(isActive);
             foreach(GameObject wall in walls){
                 wall.GetComponent<MeshCollider>().enabled = isActive;
             }
