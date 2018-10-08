@@ -32,14 +32,26 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         Vector3 lookhere = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-        transform.Rotate(lookhere);
+        Camera.main.transform.Rotate(lookhere);
     }
 
     void FixedUpdate()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(-moveHorizontal, 0.0f, -moveVertical);
+        float moveForward = -Input.GetAxis("Vertical");
+        float rotation = Camera.main.transform.rotation.eulerAngles.y - 90;
+        if (rotation >= 2 * 360)
+        {
+            rotation -= (360);
+        }
+        Debug.Log("rotation " + rotation);
+        Debug.Log(Mathf.Cos(rotation));
+        Debug.Log(Mathf.Sin(rotation));
+        Vector3 movement = new Vector3(
+            moveForward * -Mathf.Cos(rotation * Mathf.Deg2Rad),
+            0.0f,
+            moveForward * Mathf.Sin(rotation * Mathf.Deg2Rad));
+        Debug.Log("movement " + movement);
         rb.AddForce(movement * thrust);
     }
 }
