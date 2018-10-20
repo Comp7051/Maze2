@@ -16,7 +16,7 @@ public class Cheats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Y)/* || Input.GetAxis(ZAxis) > 0*/)
+        if (Input.GetKeyUp(KeyCode.Y) || Input.GetButton("joystick button 3"))
         {
             isActive = !isActive;
             foreach(GameObject wall in walls){

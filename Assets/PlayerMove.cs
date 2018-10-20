@@ -4,28 +4,18 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    // Keycode for moving the paddle up
-    public KeyCode forward;
-    // Keycode for moving the paddle down
-    public KeyCode backward;
-    // Keycode for moving the paddle up
-    public KeyCode right;
-    // Keycode for moving the paddle down
-    public KeyCode left;
-    // What axis for moving the paddle up and down
-    public string XAxis;
-
-    public string ZAxis;
-
     public float thrust;
-    public int speed;
     private Rigidbody rb;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * -thrust);
+        initialPosition = gameObject.transform.position;
+        initialRotation = Camera.main.transform.rotation;
     }
 
     // Update is called once per frame
@@ -56,11 +46,12 @@ public class PlayerMove : MonoBehaviour
         //this is the direction in the world space we want to move:
         var desiredMoveDirection = forward * moveForward + right * moveHorizontal;
 
-        Vector3 movement = new Vector3(
-            moveForward,
-            0.0f,
-            moveForward);
-
         rb.AddForce(desiredMoveDirection * thrust);
+
+        if (Input.GetKeyUp(KeyCode.Home) || Input.GetButton("joystick button 13"))
+        {
+            gameObject.transform.position = initialPosition;
+            Camera.main.transform.rotation = initialRotation;
+        }
     }
 }
