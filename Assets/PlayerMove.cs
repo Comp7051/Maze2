@@ -48,10 +48,18 @@ public class PlayerMove : MonoBehaviour
 
         rb.AddForce(desiredMoveDirection * thrust);
 
-        if (Input.GetKeyUp(KeyCode.Home) || Input.GetButton("joystick button 13"))
+        if (Input.GetKeyUp(KeyCode.Home) || Input.GetKeyUp(KeyCode.Joystick1Button13))
         {
             gameObject.transform.position = initialPosition;
             Camera.main.transform.rotation = initialRotation;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            gameObject.SetActive(false);
         }
     }
 }
