@@ -31,6 +31,8 @@ public class SmoothMouseLook : MonoBehaviour {
 
 	Quaternion originalRotation;
 
+    public bool affectOnlyCamera;
+
 	void Update ()
 	{
 		if (axes == RotationAxes.MouseXAndY)
@@ -38,8 +40,11 @@ public class SmoothMouseLook : MonoBehaviour {
 			rotAverageY = 0f;
 			rotAverageX = 0f;
 
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+            if (affectOnlyCamera)
+                rotationY += -Input.GetAxis("Mouse Y") * sensitivityY;
+            else
+                rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationX += Input.GetAxis("Mouse X") * sensitivityX;
 
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
@@ -67,9 +72,13 @@ public class SmoothMouseLook : MonoBehaviour {
 			Quaternion yQuaternion = Quaternion.AngleAxis (rotAverageY, Vector3.left);
 			Quaternion xQuaternion = Quaternion.AngleAxis (rotAverageX, Vector3.up);
 
-			transform.localRotation = originalRotation * xQuaternion * yQuaternion;
-		}
-		else if (axes == RotationAxes.MouseX)
+            if (affectOnlyCamera)
+                Camera.main.transform.rotation = originalRotation * xQuaternion * yQuaternion;
+            else
+                transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+
+        }
+        else if (axes == RotationAxes.MouseX)
 		{			
 			rotAverageX = 0f;
 
@@ -88,9 +97,12 @@ public class SmoothMouseLook : MonoBehaviour {
 			rotAverageX = ClampAngle (rotAverageX, minimumX, maximumX);
 
 			Quaternion xQuaternion = Quaternion.AngleAxis (rotAverageX, Vector3.up);
-			transform.localRotation = originalRotation * xQuaternion;			
-		}
-		else
+            if (affectOnlyCamera)
+                Camera.main.transform.rotation = originalRotation * xQuaternion;
+            else
+                transform.localRotation = originalRotation * xQuaternion;
+        }
+        else
 		{			
 			rotAverageY = 0f;
 
@@ -109,8 +121,11 @@ public class SmoothMouseLook : MonoBehaviour {
 			rotAverageY = ClampAngle (rotAverageY, minimumY, maximumY);
 
 			Quaternion yQuaternion = Quaternion.AngleAxis (rotAverageY, Vector3.left);
-			transform.localRotation = originalRotation * yQuaternion;
-		}
+            if (affectOnlyCamera)
+                Camera.main.transform.rotation = originalRotation * yQuaternion;
+            else
+                transform.localRotation = originalRotation * yQuaternion;
+        }
 	}
 
 	public void ResetRotationToOriginal()
@@ -121,7 +136,10 @@ public class SmoothMouseLook : MonoBehaviour {
 		rotationY = 0.0F;
 		rotAverageX = 0.0F;
 		rotAverageY = 0.0F;
-		transform.localRotation = originalRotation;
+        if (affectOnlyCamera)
+            Camera.main.transform.rotation = originalRotation;
+        else
+            transform.localRotation = originalRotation;
 	}
 
 	void Start ()
@@ -129,7 +147,10 @@ public class SmoothMouseLook : MonoBehaviour {
 		Rigidbody rb = GetComponent<Rigidbody>();	
 		if (rb)
 			rb.freezeRotation = true;
-		originalRotation = transform.localRotation;
+        if (affectOnlyCamera)
+            originalRotation = Camera.main.transform.rotation;
+        else
+            originalRotation = transform.localRotation;
 	}
 
 	public static float ClampAngle (float angle, float min, float max)
