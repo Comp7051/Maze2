@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody rb;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
+	private SmoothMouseLook mouseLook;
 
     // Use this for initialization
     void Start()
@@ -15,14 +16,12 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
-        initialRotation = Camera.main.transform.rotation;
+		mouseLook = GetComponent<SmoothMouseLook>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 lookhere = new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-        Camera.main.transform.Rotate(lookhere);
     }
 
     void FixedUpdate()
@@ -51,7 +50,7 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Home) || Input.GetKeyUp(KeyCode.Joystick1Button13))
         {
             gameObject.transform.position = initialPosition;
-            Camera.main.transform.rotation = initialRotation;
+			mouseLook.ResetRotationToOriginal();
         }
     }
 

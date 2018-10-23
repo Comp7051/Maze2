@@ -113,6 +113,17 @@ public class SmoothMouseLook : MonoBehaviour {
 		}
 	}
 
+	public void ResetRotationToOriginal()
+	{
+		rotArrayX.Clear ();
+		rotArrayY.Clear ();
+		rotationX = 0.0F;
+		rotationY = 0.0F;
+		rotAverageX = 0.0F;
+		rotAverageY = 0.0F;
+		transform.localRotation = originalRotation;
+	}
+
 	void Start ()
 	{		
 		Rigidbody rb = GetComponent<Rigidbody>();	
