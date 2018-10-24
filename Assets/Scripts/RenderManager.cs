@@ -24,4 +24,16 @@ public class RenderManager : MonoBehaviour {
 			Debug.Log (Shader.GetGlobalFloat ("_Ambient"));
 		}
 	}
+
+	private Material fogGradientMaterial;
+
+	void OnValidate ()
+	{
+		fogGradientMaterial = new Material( Shader.Find("Custom/FogEffect") );
+	}
+
+	void OnRenderImage (RenderTexture source, RenderTexture destination)
+	{
+		Graphics.Blit (source, destination, fogGradientMaterial);
+	}
 }
