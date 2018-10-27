@@ -28,9 +28,10 @@ public class GenerateMaze : MonoBehaviour
         y = Random.Range(0, height);
         cells[x][y].isVisited = true;
         list.Push(cells[x][y]);
-
-        while (list.Count > 0)
+        int count = 0;
+        while (list.Count > 0 && count < 100)
         {
+            Debug.Log("size " + list.Count);
             List<Cell> neighbours = new List<Cell>();
 
             if (x < width - 1)
@@ -63,6 +64,7 @@ public class GenerateMaze : MonoBehaviour
                 }
             }
 
+            Debug.Log("neighbours " + neighbours.Count);
             if (neighbours.Count > 0)
             {
                 Wall[] currentCellWalls = cells[x][y].Box.GetComponentsInChildren<Wall>();
@@ -106,15 +108,21 @@ public class GenerateMaze : MonoBehaviour
                     nextCellWalls[2].gameObject.GetComponent<BoxCollider>().enabled = false;
                 }
 
-                list.Push(neighbours[nextCell]);
                 x = nextx;
                 y = nexty;
-
+                cells[x][y].isVisited = true;
+                list.Push(cells[x][y]);
             }
-            else if (neighbours.Count < 0)
+            else if (neighbours.Count <= 0)
             {
                 list.Pop();
+                if (list.Count > 0)
+                {
+                    x = list.Peek().posX;
+                    y = list.Peek().posY;
+                }
             }
+            count++;
         }
     }
 
