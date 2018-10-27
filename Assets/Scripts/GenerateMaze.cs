@@ -13,6 +13,7 @@ public class GenerateMaze : MonoBehaviour
     private Stack<Cell> list;
     private List<List<Cell>> cells;
     private Vector3 enemyPosition;
+    public Vector3 endingPosition;
     private GameObject player;
     private GameObject enemy;
 
@@ -23,6 +24,10 @@ public class GenerateMaze : MonoBehaviour
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         GenerateCells();
         CreateMaze();
+
+        x = Random.Range(0, width);
+        y = Random.Range(0, height);
+        enemy.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
     }
 
     private void CreateMaze()
@@ -115,7 +120,7 @@ public class GenerateMaze : MonoBehaviour
                 y = nexty;
                 cells[x][y].isVisited = true;
                 list.Push(cells[x][y]);
-                enemyPosition = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
+                endingPosition = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
             }
             else if (neighbours.Count <= 0)
             {
@@ -126,7 +131,6 @@ public class GenerateMaze : MonoBehaviour
                     y = list.Peek().posY;
                 }
             }
-            enemy.transform.position = enemyPosition;
         }
     }
 

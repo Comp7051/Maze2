@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyMove : MonoBehaviour
 {
     public float speed;
-    private float direction = -1;
 
     // Use this for initialization
     void Start()
@@ -21,7 +20,6 @@ public class EnemyMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         //this is the direction in the world space we want to move:
         var desiredMoveDirection = new Vector3(0, 0, speed);
 
