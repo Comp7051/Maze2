@@ -34,32 +34,44 @@ public class GenerateMaze : MonoBehaviour
             Debug.Log("size " + list.Count);
             List<Cell> neighbours = new List<Cell>();
 
+            Debug.Log("x " + x);
+            Debug.Log("y " + y);
             if (x < width - 1)
             {
+                Debug.Log(cells[x + 1][y].isVisited);
                 if (!cells[x + 1][y].isVisited)
                 {
+                    Debug.Log("allah1");
                     neighbours.Add(cells[x + 1][y]);
                 }
             }
-            else if (x > 0)
+
+            if (x > 0)
             {
+                Debug.Log(cells[x - 1][y].isVisited);
                 if (!cells[x - 1][y].isVisited)
                 {
+                    Debug.Log("allah2");
                     neighbours.Add(cells[x - 1][y]);
                 }
             }
 
             if (y < height - 1)
             {
+                Debug.Log(cells[x][y + 1].isVisited);
                 if (!cells[x][y + 1].isVisited)
                 {
+                    Debug.Log("allah3");
                     neighbours.Add(cells[x][y + 1]);
                 }
             }
-            else if (y > 0)
+
+            if (y > 0)
             {
+                Debug.Log(cells[x][y - 1].isVisited);
                 if (!cells[x][y - 1].isVisited)
                 {
+                    Debug.Log("allah4");
                     neighbours.Add(cells[x][y - 1]);
                 }
             }
