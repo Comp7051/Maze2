@@ -31,7 +31,10 @@ public class EnemyMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        speed *= -1;
-        GameObject.Find("Root").transform.Rotate(new Vector3(0, 0, 180));
+        if (collision.gameObject.name != "Cell(Clone)")
+        {
+            speed *= -1;
+            GameObject.Find("Root").transform.Rotate(new Vector3(0, 0, 180));
+        }
     }
 }

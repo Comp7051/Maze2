@@ -12,71 +12,67 @@ public class GenerateMaze : MonoBehaviour
     private int y;
     private Stack<Cell> list;
     private List<List<Cell>> cells;
+    private Vector3 enemyPosition;
+    private GameObject player;
+    private GameObject enemy;
 
     // Use this for initialization
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
         GenerateCells();
-
         CreateMaze();
     }
 
     private void CreateMaze()
     {
         list = new Stack<Cell>();
+
         x = Random.Range(0, width);
         y = Random.Range(0, height);
+
+        player.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
+
         cells[x][y].isVisited = true;
+
         list.Push(cells[x][y]);
-        int count = 0;
-        while (list.Count > 0 && count < 100)
+
+        while (list.Count > 0)
         {
-            Debug.Log("size " + list.Count);
             List<Cell> neighbours = new List<Cell>();
 
-            Debug.Log("x " + x);
-            Debug.Log("y " + y);
             if (x < width - 1)
             {
-                Debug.Log(cells[x + 1][y].isVisited);
                 if (!cells[x + 1][y].isVisited)
                 {
-                    Debug.Log("allah1");
                     neighbours.Add(cells[x + 1][y]);
                 }
             }
 
             if (x > 0)
             {
-                Debug.Log(cells[x - 1][y].isVisited);
                 if (!cells[x - 1][y].isVisited)
                 {
-                    Debug.Log("allah2");
                     neighbours.Add(cells[x - 1][y]);
                 }
             }
 
             if (y < height - 1)
             {
-                Debug.Log(cells[x][y + 1].isVisited);
                 if (!cells[x][y + 1].isVisited)
                 {
-                    Debug.Log("allah3");
                     neighbours.Add(cells[x][y + 1]);
                 }
             }
 
             if (y > 0)
             {
-                Debug.Log(cells[x][y - 1].isVisited);
                 if (!cells[x][y - 1].isVisited)
                 {
-                    Debug.Log("allah4");
                     neighbours.Add(cells[x][y - 1]);
                 }
             }
-
-            Debug.Log("neighbours " + neighbours.Count);
             if (neighbours.Count > 0)
             {
                 Wall[] currentCellWalls = cells[x][y].Box.GetComponentsInChildren<Wall>();
@@ -84,11 +80,6 @@ public class GenerateMaze : MonoBehaviour
                 int nextx = neighbours[nextCell].posX;
                 int nexty = neighbours[nextCell].posY;
                 Wall[] nextCellWalls = cells[nextx][nexty].Box.GetComponentsInChildren<Wall>();
-
-                Debug.Log("current x " + x);
-                Debug.Log("current y " + y);
-                Debug.Log("next x " + nextx);
-                Debug.Log("next y " + nexty);
 
                 if (nextx > x)
                 {
@@ -124,6 +115,7 @@ public class GenerateMaze : MonoBehaviour
                 y = nexty;
                 cells[x][y].isVisited = true;
                 list.Push(cells[x][y]);
+                enemyPosition = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
             }
             else if (neighbours.Count <= 0)
             {
@@ -134,7 +126,7 @@ public class GenerateMaze : MonoBehaviour
                     y = list.Peek().posY;
                 }
             }
-            count++;
+            enemy.transform.position = enemyPosition;
         }
     }
 
