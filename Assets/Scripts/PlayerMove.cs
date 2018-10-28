@@ -10,10 +10,16 @@ public class PlayerMove : MonoBehaviour
     private Quaternion initialRotation;
 	private SmoothMouseLook mouseLook;
     private GameObject maze;
+    private GameObject winScreen;
+    private GameObject loseScreen;
 
     // Use this for initialization
     void Start()
     {
+        winScreen = GameObject.Find("WinScreen");
+        winScreen.SetActive(false);
+        loseScreen = GameObject.Find("LoseScreen");
+        loseScreen.SetActive(false);
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
@@ -60,11 +66,13 @@ public class PlayerMove : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            gameObject.SetActive(false);
+            Time.timeScale = 0;
+            loseScreen.SetActive(true);
         }
         else if (collision.gameObject.tag == "Win")
         {
-            Debug.Log("WIN!");
+            Time.timeScale = 0;
+            winScreen.SetActive(true);
         }
     }
 }
