@@ -10,7 +10,6 @@ public class PlayerMove : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 	private SmoothMouseLook mouseLook;
-    private GameObject maze;
     private GameObject winScreen;
     private GameObject loseScreen;
 
@@ -25,7 +24,6 @@ public class PlayerMove : MonoBehaviour
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
 		mouseLook = GetComponent<SmoothMouseLook>();
-        maze = GameObject.FindGameObjectWithTag("Maze");
     }
 
     // Update is called once per frame

@@ -6,6 +6,7 @@ public class Cheats : MonoBehaviour
 {
     GameObject[] walls;
     bool isActive;
+
     // Use this for initialization
     void Start()
     {

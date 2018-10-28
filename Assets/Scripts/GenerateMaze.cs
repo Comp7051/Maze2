@@ -7,7 +7,6 @@ public class GenerateMaze : MonoBehaviour
 
     public int width;
     public int height;
-    private int[,] maze;
     private int x;
     private int y;
     private Stack<Cell> list;
