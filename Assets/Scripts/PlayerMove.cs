@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 	private SmoothMouseLook mouseLook;
+    private GameObject maze;
 
     // Use this for initialization
     void Start()
@@ -17,6 +18,7 @@ public class PlayerMove : MonoBehaviour
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
 		mouseLook = GetComponent<SmoothMouseLook>();
+        maze = GameObject.FindGameObjectWithTag("Maze");
     }
 
     // Update is called once per frame
@@ -59,6 +61,10 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.tag == "Enemy")
         {
             gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.tag == "Win")
+        {
+            Debug.Log("WIN!");
         }
     }
 }
