@@ -54,11 +54,6 @@ public class PlayerMove : MonoBehaviour
             gameObject.transform.position = initialPosition;
 			mouseLook.ResetRotationToOriginal();
         }
-
-        if(gameObject.transform.position == maze.GetComponent<GenerateMaze>().endingPosition)
-        {
-            Debug.Log("WIN!");
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -66,6 +61,10 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.tag == "Enemy")
         {
             gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.tag == "Win")
+        {
+            Debug.Log("WIN!");
         }
     }
 }

@@ -13,15 +13,18 @@ public class GenerateMaze : MonoBehaviour
     private Stack<Cell> list;
     private List<List<Cell>> cells;
     private Vector3 enemyPosition;
-    public Vector3 endingPosition;
+    private Vector3 endingPosition;
     private GameObject player;
     private GameObject enemy;
+    private GameObject win;
 
     // Use this for initialization
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
+        win = GameObject.FindGameObjectWithTag("Win");
+
         GenerateCells();
         CreateMaze();
 
@@ -120,7 +123,7 @@ public class GenerateMaze : MonoBehaviour
                 y = nexty;
                 cells[x][y].isVisited = true;
                 list.Push(cells[x][y]);
-                endingPosition = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
+                endingPosition = new Vector3(5 + 10 * x, 5, 5 + 10 * y);
             }
             else if (neighbours.Count <= 0)
             {
@@ -132,6 +135,7 @@ public class GenerateMaze : MonoBehaviour
                 }
             }
         }
+        win.transform.position = endingPosition;
     }
 
     private void GenerateCells()
