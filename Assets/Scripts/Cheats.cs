@@ -18,7 +18,6 @@ public class Cheats : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Y) || Input.GetKeyUp(KeyCode.Joystick1Button3))
         {
-            Debug.Log(walls.Length);
             isActive = !isActive;
             foreach(GameObject wall in walls){
                 wall.GetComponent<BoxCollider>().enabled = isActive;
