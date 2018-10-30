@@ -42,11 +42,11 @@ Shader "Custom/Fog" {
 			fixed4 frag (v2f i) : COLOR
 			{
 				float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
-				depthValue = Linear01Depth (depthValue);
+				depthValue = 1- Linear01Depth (depthValue);
 				return tex2D(_MainTex, i.depth) * depthValue;
 			}
 			ENDCG
 		}
 	}
-	//FallBack "Diffuse"
+	FallBack "Diffuse"
 }

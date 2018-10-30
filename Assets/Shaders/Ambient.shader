@@ -127,4 +127,5 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
             ENDCG
         }
     }
+    Fallback "Diffuse"
 }
