@@ -1,6 +1,8 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+﻿// http://willychyr.com/2013/11/unity-shaders-depth-and-normal-textures/
 
-// http://willychyr.com/2013/11/unity-shaders-depth-and-normal-textures/
+//https://docs.unity3d.com/Manual/PostProcessingWritingEffects.html
+
+// https://www.alanzucconi.com/2015/07/08/screen-shaders-and-postprocessing-effects-in-unity3d/
 
 Shader "Custom/Fog" {
 	Properties {
