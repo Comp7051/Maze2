@@ -7,9 +7,6 @@
 Shader "Custom/Fog" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
-	 	_MaskTex ("Mask texture", 2D) = "white" {}
-		_maskBlend ("Mask blending", Float) = 0.5
-	 	_maskSize ("Mask Size", Float) = 1
 	}
 
 	SubShader {
@@ -27,10 +24,6 @@ Shader "Custom/Fog" {
 
 			uniform sampler2D _CameraDepthTexture;
 			uniform sampler2D _MainTex;
-			uniform sampler2D _MaskTex;
-
-			fixed _maskBlend;
- 			fixed _maskSize;
 
 			struct v2f {
 			   float4 vertex : SV_POSITION;
@@ -77,9 +70,8 @@ Shader "Custom/Fog" {
 
 			   //return col;//depth * col;
 
-				fixed4 mask = tex2D(_MaskTex, i.depth * _maskSize);
 				fixed4 base = tex2D(_MainTex, i.depth);
-				return lerp(base, mask, _maskBlend ) * depthValue;
+				return base * depthValue;
 			}
 			ENDCG
 		}
