@@ -7,6 +7,7 @@
 Shader "Custom/Fog" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
+		_Color("Color", Color) = (1, 1, 1,1 )
 	}
 
 	SubShader {
@@ -24,6 +25,7 @@ Shader "Custom/Fog" {
 
 			uniform sampler2D _CameraDepthTexture;
 			uniform sampler2D _MainTex;
+			uniform fixed4 _Color;
 
 			struct v2f {
 			   float4 vertex : SV_POSITION;
@@ -42,8 +44,10 @@ Shader "Custom/Fog" {
 			fixed4 frag (v2f i) : COLOR
 			{
 				float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
-				depthValue = 1- Linear01Depth (depthValue);
-				return tex2D(_MainTex, i.depth) * depthValue;
+				//depthValue = (1 - (Linear01Depth (depthValue) * 2));
+				depthValue = (Linear01Depth (depthValue) * 2) + 0.5;
+				//depthValue = 1 - Linear01Depth (depthValue);
+				return tex2D(_MainTex, i.depth) * depthValue * _Color;
 			}
 			ENDCG
 		}
