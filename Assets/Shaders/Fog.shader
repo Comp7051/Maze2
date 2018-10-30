@@ -1,68 +1,86 @@
-﻿// https://www.youtube.com/watch?v=Tjl8jP5Nuvc
-// https://catlikecoding.com/unity/tutorials/rendering/part-14/
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Custom/Fog"
-{
-	Properties
-	{
-		//_MainTex ("Texture", 2D) {} // = "white" {}
-		_FogTex ("Texture", 2D) = "white" {}
-		_FogColor("Fog Color", Color) = (1, 0, 0, 1) // This always seems to be zero. wtf?
+// http://willychyr.com/2013/11/unity-shaders-depth-and-normal-textures/
+
+Shader "Custom/Fog" {
+	Properties {
+		_MainTex ("Base (RGB)", 2D) = "white" {}
+	 	_MaskTex ("Mask texture", 2D) = "white" {}
+		_maskBlend ("Mask blending", Float) = 0.5
+	 	_maskSize ("Mask Size", Float) = 1
 	}
-	SubShader
-	{
-		Tags { "RenderType"="Opaque" }
-		//LOD 100
 
-		Pass
-		{
+	SubShader {
+		//Tags { "RenderType"="Opaque" }
+		//Tags { "RenderType"="Opaque" "Queue"="Geometry" "LightMode"="ForwardBase" }
+		//Tags { "Queue" = "Transparent" "RenderType"="Transparent"  }
+
+		Pass{
+			//Cull Off ZWrite Off ZTest Always
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			// make fog work
-			//#pragma multi_compile_fog
-			
 			#include "UnityCG.cginc"
 
-			struct v2f
-			{
-				float4 pos : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                //float3 worldPos : TEXCOORD1;
-                //float3 worldNormal : TEXCOORD2;
-                float depth : DEPTH;
+			uniform sampler2D _CameraDepthTexture;
+			uniform sampler2D _MainTex;
+			uniform sampler2D _MaskTex;
+
+			fixed _maskBlend;
+ 			fixed _maskSize;
+
+			struct v2f {
+			   float4 vertex : SV_POSITION;
+			   //float4 scrPos:TEXCOORD1;
+			   float2 depth:TEXCOORD0;
 			};
 
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
-			fixed4 _FogColor;
+			//Vertex Shader
+//			v2f vert (appdata_base v)
+//			{
+//			   v2f o;
+//			   o.pos = UnityObjectToClipPos (v.vertex);
+//			   o.scrPos=ComputeScreenPos(o.pos);
+//			   //for some reason, the y position of the depth texture comes out inverted
+//			   //o.scrPos.y = 1 - o.scrPos.y;
+//			   return o;
+//			}
 
-			fixed4 ApplyFog(fixed4 tex, float depth)
+			v2f vert( appdata_img v )
 			{
-				float invert = 1 - depth; // fog distance. Need to address whiting out at very far distances maybe?
-				//return (fixed4(invert, invert, invert, 1) * tex) * _FogColor;
-				return (fixed4(invert, invert, invert, 1) * tex);
+			    v2f o;
+			    o.vertex = UnityObjectToClipPos (v.vertex);
+			    //o.scrPos = v.texcoord;
+			    //UNITY_TRANSFER_DEPTH(o.depth);
+			    o.depth = v.texcoord;
+			    return o;
 			}
-			
-			v2f vert (appdata_base v)
-			{
-				v2f o;
-				o.pos = UnityObjectToClipPos(v.vertex);
-				//o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-				//o.depth = mul(UNITY_MATRIX_MV, v.vertex).z * _ProjectionParams.w;
-				o.depth = UnityObjectToViewPos(v.vertex).z * _ProjectionParams.w;
-				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-				//UNITY_TRANSFER_FOG(o,o.vertex);
-				return o;
-			}
-			
-			fixed4 frag (v2f i) : SV_Target
-			{
-				fixed4 col = ApplyFog(tex2D(_MainTex, i.uv), i.depth);
 
-            	return col;
+			//Fragment Shader
+			fixed4 frag (v2f i) : COLOR
+			{
+			   //float depthValue = Linear01Depth (tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.depth)).r);
+			   float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
+			   depthValue = Linear01Depth (depthValue);
+			   //half4 depth;
+
+			   //depth.r = depthValue;
+			   //depth.g = depthValue;
+			   //depth.b = depthValue;
+
+			   //depth.a = 0.5;
+
+			   //fixed4 col = tex2D(_MainTex, i.scrPos);
+
+			   //return col;//depth * col;
+
+				fixed4 mask = tex2D(_MaskTex, i.depth * _maskSize);
+				fixed4 base = tex2D(_MainTex, i.depth);
+				return lerp(base, mask, _maskBlend ) * depthValue;
 			}
 			ENDCG
 		}
 	}
+	//FallBack "Diffuse"
 }
