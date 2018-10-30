@@ -55,23 +55,10 @@ Shader "Custom/Fog" {
 			//Fragment Shader
 			fixed4 frag (v2f i) : COLOR
 			{
-			   //float depthValue = Linear01Depth (tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.depth)).r);
-			   float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
-			   depthValue = Linear01Depth (depthValue);
-			   //half4 depth;
-
-			   //depth.r = depthValue;
-			   //depth.g = depthValue;
-			   //depth.b = depthValue;
-
-			   //depth.a = 0.5;
-
-			   //fixed4 col = tex2D(_MainTex, i.scrPos);
-
-			   //return col;//depth * col;
-
-				fixed4 base = tex2D(_MainTex, i.depth);
-				return base * depthValue;
+				//float depthValue = Linear01Depth (tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.depth)).r);
+				float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
+				depthValue = Linear01Depth (depthValue);
+				return tex2D(_MainTex, i.depth) * depthValue;
 			}
 			ENDCG
 		}
