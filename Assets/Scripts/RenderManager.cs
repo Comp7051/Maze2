@@ -35,7 +35,7 @@ public class RenderManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyUp (KeyCode.N)) {
+		if (Input.GetKeyUp(KeyCode.N) || Input.GetKeyUp(KeyCode.Joystick1Button4)) {
 			if (ambientIntensity >= ambientIntensityDay)
 				ambientIntensity = ambientIntensityNight;
 			else if (ambientIntensity <= ambientIntensityNight)
@@ -45,7 +45,7 @@ public class RenderManager : MonoBehaviour {
 			Debug.Log (Shader.GetGlobalFloat ("_Ambient"));
 		}
 
-		if (Input.GetKeyUp (KeyCode.F)) {
+		if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Joystick1Button5)) {
 			fogEnabled = !fogEnabled;
 			ToggleFog (fogEnabled);
 		}

@@ -21,7 +21,10 @@ public class Cheats : MonoBehaviour
         {
             isActive = !isActive;
             foreach(GameObject wall in walls){
-                wall.GetComponent<BoxCollider>().enabled = isActive;
+                if (wall.GetComponent<MeshRenderer>().enabled)
+                {
+                    wall.GetComponent<BoxCollider>().enabled = isActive;
+                }
             }
         }
     }
