@@ -7,7 +7,6 @@ public class GenerateMaze : MonoBehaviour
 
     public int width;
     public int height;
-    private int[,] maze;
     private int x;
     private int y;
     private Stack<Cell> list;
@@ -19,7 +18,7 @@ public class GenerateMaze : MonoBehaviour
     private GameObject win;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");

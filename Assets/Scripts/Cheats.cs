@@ -6,6 +6,7 @@ public class Cheats : MonoBehaviour
 {
     GameObject[] walls;
     bool isActive;
+
     // Use this for initialization
     void Start()
     {
@@ -20,7 +21,7 @@ public class Cheats : MonoBehaviour
         {
             isActive = !isActive;
             foreach(GameObject wall in walls){
-                wall.GetComponent<MeshCollider>().enabled = isActive;
+                wall.GetComponent<BoxCollider>().enabled = isActive;
             }
         }
     }
