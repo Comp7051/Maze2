@@ -7,9 +7,7 @@
 Shader "Custom/Fog" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
-	 	_MaskTex ("Mask texture", 2D) = "white" {}
-		_maskBlend ("Mask blending", Float) = 0.5
-	 	_maskSize ("Mask Size", Float) = 1
+		_Color("Color", Color) = (1, 1, 1,1 )
 	}
 
 	SubShader {
@@ -27,34 +25,17 @@ Shader "Custom/Fog" {
 
 			uniform sampler2D _CameraDepthTexture;
 			uniform sampler2D _MainTex;
-			uniform sampler2D _MaskTex;
-
-			fixed _maskBlend;
- 			fixed _maskSize;
+			uniform fixed4 _Color;
 
 			struct v2f {
 			   float4 vertex : SV_POSITION;
-			   //float4 scrPos:TEXCOORD1;
 			   float2 depth:TEXCOORD0;
 			};
-
-			//Vertex Shader
-//			v2f vert (appdata_base v)
-//			{
-//			   v2f o;
-//			   o.pos = UnityObjectToClipPos (v.vertex);
-//			   o.scrPos=ComputeScreenPos(o.pos);
-//			   //for some reason, the y position of the depth texture comes out inverted
-//			   //o.scrPos.y = 1 - o.scrPos.y;
-//			   return o;
-//			}
 
 			v2f vert( appdata_img v )
 			{
 			    v2f o;
 			    o.vertex = UnityObjectToClipPos (v.vertex);
-			    //o.scrPos = v.texcoord;
-			    //UNITY_TRANSFER_DEPTH(o.depth);
 			    o.depth = v.texcoord;
 			    return o;
 			}
@@ -62,27 +43,14 @@ Shader "Custom/Fog" {
 			//Fragment Shader
 			fixed4 frag (v2f i) : COLOR
 			{
-			   //float depthValue = Linear01Depth (tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.depth)).r);
-			   float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
-			   depthValue = Linear01Depth (depthValue);
-			   //half4 depth;
-
-			   //depth.r = depthValue;
-			   //depth.g = depthValue;
-			   //depth.b = depthValue;
-
-			   //depth.a = 0.5;
-
-			   //fixed4 col = tex2D(_MainTex, i.scrPos);
-
-			   //return col;//depth * col;
-
-				fixed4 mask = tex2D(_MaskTex, i.depth * _maskSize);
-				fixed4 base = tex2D(_MainTex, i.depth);
-				return lerp(base, mask, _maskBlend ) * depthValue;
+				float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
+				//depthValue = (1 - (Linear01Depth (depthValue) * 2));
+				depthValue = (Linear01Depth (depthValue) * 2) + 0.5;
+				//depthValue = 1 - Linear01Depth (depthValue);
+				return tex2D(_MainTex, i.depth) * depthValue * _Color;
 			}
 			ENDCG
 		}
 	}
-	//FallBack "Diffuse"
+	FallBack "Diffuse"
 }
