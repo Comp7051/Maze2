@@ -26,10 +26,11 @@ Shader "Custom/Fog"
 
 			struct v2f
 			{
-				float2 uv : TEXCOORD0;
-				//UNITY_FOG_COORDS(1)
-				float4 vertex : SV_POSITION;
-				float depth : DEPTH;
+				float4 pos : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                //float3 worldPos : TEXCOORD1;
+                //float3 worldNormal : TEXCOORD2;
+                float depth : DEPTH;
 			};
 
 			sampler2D _MainTex;
@@ -46,7 +47,7 @@ Shader "Custom/Fog"
 			v2f vert (appdata_base v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 				//o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				//o.depth = mul(UNITY_MATRIX_MV, v.vertex).z * _ProjectionParams.w;
 				o.depth = UnityObjectToViewPos(v.vertex).z * _ProjectionParams.w;
