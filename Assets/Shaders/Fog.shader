@@ -24,12 +24,6 @@ Shader "Custom/Fog"
 			
 			#include "UnityCG.cginc"
 
-			struct appdata
-			{
-				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
-			};
-
 			struct v2f
 			{
 				float2 uv : TEXCOORD0;
@@ -49,14 +43,14 @@ Shader "Custom/Fog"
 				return (fixed4(invert, invert, invert, 1) * tex);
 			}
 			
-			v2f vert (appdata v)
+			v2f vert (appdata_base v)
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				//o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				//o.depth = mul(UNITY_MATRIX_MV, v.vertex).z * _ProjectionParams.w;
 				o.depth = UnityObjectToViewPos(v.vertex).z * _ProjectionParams.w;
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 				//UNITY_TRANSFER_FOG(o,o.vertex);
 				return o;
 			}
