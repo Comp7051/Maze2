@@ -11,15 +11,16 @@ public class RenderManager : MonoBehaviour {
 	//public Material fogmat;
 	//Camera playerCamera;
 	public Shader replacementShader;
+	private bool fogEnabled;
 
-	void OnEnable() {
-		if (replacementShader != null) {
-			GetComponent<Camera> ().SetReplacementShader (replacementShader, "RenderType");
+	void ToggleFog(bool enable) {
+		if (enable) {
+			if (replacementShader != null) {
+				GetComponent<Camera> ().SetReplacementShader (replacementShader, "RenderType");
+			}
+		} else {
+			GetComponent<Camera> ().ResetReplacementShader ();
 		}
-	}
-
-	void OnDisable() {
-		GetComponent<Camera> ().ResetReplacementShader ();
 	}
 
 	// Use this for initialization
@@ -28,6 +29,8 @@ public class RenderManager : MonoBehaviour {
 		Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
 		//playerCamera = Camera.main;
 		//playerCamera.depthTextureMode = DepthTextureMode.Depth;
+		fogEnabled = false;
+		ToggleFog (fogEnabled);
 	}
 
 	// Update is called once per frame
@@ -43,7 +46,8 @@ public class RenderManager : MonoBehaviour {
 		}
 
 		if (Input.GetKeyUp (KeyCode.F)) {
-			
+			fogEnabled = !fogEnabled;
+			ToggleFog (fogEnabled);
 		}
 	}
 
