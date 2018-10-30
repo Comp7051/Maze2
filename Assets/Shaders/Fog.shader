@@ -12,7 +12,7 @@ Shader "Custom/Fog"
 		_MainTex ("Main Texture", 2D) = "white" {}
  
         [Header(Ambient)]
-        //_Ambient ("Intensity", Range(0., 1.)) = 0.1
+        _Ambient ("Intensity", Range(0., 1.)) = 0.1
         _AmbColor ("Color", color) = (1., 1., 1., 1.)
  
         [Header(Diffuse)]
@@ -57,6 +57,25 @@ Shader "Custom/Fog"
 			float4 _MainTex_ST;
 			fixed4 _FogColor;
 
+			fixed4 _LightColor0;
+           
+            // Diffuse
+            fixed _Diffuse;
+            fixed4 _DifColor;
+ 
+            //Specular
+            fixed _Shininess;
+            fixed4 _SpecColor;
+           
+            //Ambient
+            fixed _Ambient;
+            fixed4 _AmbColor;
+ 
+            // Emission
+            sampler2D _EmissionTex;
+            fixed4 _EmiColor;
+            fixed _EmiVal;
+
 			v2f vert (appdata_base v)
 			{
 				v2f o;
@@ -90,9 +109,43 @@ Shader "Custom/Fog"
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = ApplyFog(tex2D(_MainTex, i.uv), i.depth);
+				//fixed4 c = ApplyFog(tex2D(_MainTex, i.uv), i.depth);
 
-            	return col;
+				fixed4 c = tex2D(_MainTex, i.uv);
+ 
+                // Light direction
+                float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
+ 
+                // Camera direction
+                float3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+ 
+                float3 worldNormal = normalize(i.worldNormal);
+ 
+                // Compute ambient lighting
+                fixed4 amb = _Ambient * _AmbColor;
+ 
+                // Compute the diffuse lighting
+                fixed4 NdotL = max(0., dot(worldNormal, lightDir) * _LightColor0);
+                fixed4 dif = NdotL * _Diffuse * _LightColor0 * _DifColor;
+ 
+                fixed4 light = dif + amb;
+ 
+                // Compute the specular lighting
+                #if _SPEC_ON
+                float3 refl = normalize(reflect(-lightDir, worldNormal));
+                float RdotV = max(0., dot(refl, viewDir));
+                fixed4 spec = pow(RdotV, _Shininess) * _LightColor0 * ceil(NdotL) * _SpecColor;
+ 
+                light += spec;
+                #endif
+ 
+                c.rgb *= light.rgb;
+ 
+                // Compute emission
+                fixed4 emi = tex2D(_EmissionTex, i.uv).r * _EmiColor * _EmiVal;
+                c.rgb += emi.rgb;
+ 
+            	return c;
 			}
 			ENDCG
 		}
