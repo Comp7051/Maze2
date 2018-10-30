@@ -35,18 +35,25 @@ public class SmoothMouseLook : MonoBehaviour {
 
 	void Update ()
 	{
-		if (axes == RotationAxes.MouseXAndY)
-		{			
-			rotAverageY = 0f;
-			rotAverageX = 0f;
+        if (axes == RotationAxes.MouseXAndY)
+        {
+            rotAverageY = 0f;
+            rotAverageX = 0f;
 
-            if (affectOnlyCamera)
+            if (affectOnlyCamera) { 
                 rotationY += -Input.GetAxis("Mouse Y") * sensitivityY;
+                rotationY += -Input.GetAxis("Vertical2") * sensitivityY;
+            }
             else
+            {
                 rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+                rotationY += Input.GetAxis("Vertical2") * sensitivityY;
+            }
+            
             rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+            rotationX += Input.GetAxis("Horizontal2") * sensitivityX;
 
-			rotArrayY.Add(rotationY);
+            rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
 
 			if (rotArrayY.Count >= frameCounter) {
@@ -77,14 +84,17 @@ public class SmoothMouseLook : MonoBehaviour {
             else
                 transform.localRotation = originalRotation * xQuaternion * yQuaternion;
 
+
+
         }
         else if (axes == RotationAxes.MouseX)
 		{			
 			rotAverageX = 0f;
 
 			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+            rotationX += Input.GetAxis("Horizontal2") * sensitivityX;
 
-			rotArrayX.Add(rotationX);
+            rotArrayX.Add(rotationX);
 
 			if (rotArrayX.Count >= frameCounter) {
 				rotArrayX.RemoveAt(0);
@@ -107,8 +117,9 @@ public class SmoothMouseLook : MonoBehaviour {
 			rotAverageY = 0f;
 
 			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationY += Input.GetAxis("Vertical2") * sensitivityY;
 
-			rotArrayY.Add(rotationY);
+            rotArrayY.Add(rotationY);
 
 			if (rotArrayY.Count >= frameCounter) {
 				rotArrayY.RemoveAt(0);
