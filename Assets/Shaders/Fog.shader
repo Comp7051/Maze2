@@ -44,10 +44,13 @@ Shader "Custom/Fog" {
 			fixed4 frag (v2f i) : COLOR
 			{
 				float depthValue = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.depth);
+				float mixCoef = saturate(Linear01Depth(depthValue) + 0.1);
+
 				//depthValue = (1 - (Linear01Depth (depthValue) * 2));
-				depthValue = (Linear01Depth (depthValue) * 2) + 0.5;
 				//depthValue = 1 - Linear01Depth (depthValue);
-				return tex2D(_MainTex, i.depth) * depthValue * _Color;
+				half4 col = tex2D(_MainTex, i.depth);
+				col = lerp(col, _Color, mixCoef);
+				return col;
 			}
 			ENDCG
 		}
