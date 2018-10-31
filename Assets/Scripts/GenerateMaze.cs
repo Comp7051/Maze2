@@ -27,8 +27,8 @@ public class GenerateMaze : MonoBehaviour
         GenerateCells();
         CreateMaze();
 
-        x = Random.Range(0, width);
-        y = Random.Range(0, height);
+        x = Random.Range(width/2, width);
+        y = Random.Range(height/2, height);
         enemy.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
     }
 
@@ -36,8 +36,8 @@ public class GenerateMaze : MonoBehaviour
     {
         list = new Stack<Cell>();
 
-        x = Random.Range(0, width);
-        y = Random.Range(0, height);
+        x = Random.Range(0, width/2);
+        y = Random.Range(0, height/2);
 
         player.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
 
