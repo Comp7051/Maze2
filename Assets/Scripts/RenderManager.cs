@@ -31,6 +31,7 @@ public class RenderManager : MonoBehaviour {
 				ambientIntensity = ambientIntensityDay;
 
 			Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
+			RenderSettings.skybox.SetFloat("_Exposure", ambientIntensity);
 		}
 
 		if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Joystick1Button5)) {
