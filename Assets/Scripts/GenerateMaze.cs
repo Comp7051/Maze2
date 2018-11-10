@@ -16,6 +16,7 @@ public class GenerateMaze : MonoBehaviour
     private GameObject player;
     private GameObject enemy;
     private GameObject win;
+    private GameObject door;
 
     // Use this for initialization
     void Awake()
@@ -23,6 +24,7 @@ public class GenerateMaze : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         win = GameObject.FindGameObjectWithTag("Win");
+        door = GameObject.FindGameObjectWithTag("Door");
 
         GenerateCells();
         CreateMaze();
@@ -30,6 +32,11 @@ public class GenerateMaze : MonoBehaviour
         x = Random.Range(width/2, width);
         y = Random.Range(height/2, height);
         enemy.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
+
+        x = Random.Range(0, width);
+        y = Random.Range(0, height);
+
+        door.transform.position = new Vector3(5 + 10 * x, 0.95f, 5 + 10 * y);
     }
 
     private void CreateMaze()
