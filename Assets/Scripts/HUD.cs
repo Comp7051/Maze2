@@ -1,25 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ScoreManager : MonoBehaviour {
+public class HUD : MonoBehaviour {
 
-	public static int score = 0;
+	public Text score;
 
 	// Use this for initialization
 	void Start () {
+		score.text = "Score:";
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-	public static void Score() {
-		score++;
-	}
-
-	public static int GetScore() {
-		return score;
+		score.text = "Score: " + ScoreManager.GetScore ().ToString();
 	}
 }
