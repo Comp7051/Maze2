@@ -57,11 +57,19 @@ public class GenerateMaze : MonoBehaviour
         int wallnum = Random.Range(0, range.Count);
         GameObject cellObject = walls[(int)range[wallnum]].gameObject;
 
-        door.transform.position = new Vector3(cellObject.gameObject.transform.position.x, cellObject.gameObject.transform.position.y-4, cellObject.gameObject.transform.position.z);
+        door.transform.position = new Vector3(cellObject.gameObject.transform.position.x, cellObject.gameObject.transform.position.y - 4, cellObject.gameObject.transform.position.z);
 
-        if(cellObject.name == "East Wall" || cellObject.name == "West Wall")
+        if (cellObject.name == "East Wall")
         {
             door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z + 90);
+        }
+        else if (cellObject.name == "West Wall")
+        {
+            door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z - 90);
+        }
+        else if (cellObject.name == "South Wall")
+        {
+            door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z + 180);
         }
 
         cellObject.SetActive(false);
