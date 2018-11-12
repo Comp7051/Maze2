@@ -25,10 +25,13 @@ public class RenderManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyUp(KeyCode.N) || Input.GetKeyUp(KeyCode.Joystick1Button4)) {
-			if (ambientIntensity >= ambientIntensityDay)
+			if (ambientIntensity >= ambientIntensityDay) {
 				ambientIntensity = ambientIntensityNight;
-			else if (ambientIntensity <= ambientIntensityNight)
+				MusicManager.NightState (true);
+			} else if (ambientIntensity <= ambientIntensityNight) {
 				ambientIntensity = ambientIntensityDay;
+				MusicManager.NightState (false);
+			}
 
 			Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
 			RenderSettings.skybox.SetFloat("_Exposure", ambientIntensity);
@@ -36,6 +39,7 @@ public class RenderManager : MonoBehaviour {
 
 		if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Joystick1Button5)) {
 			fogEnabled = !fogEnabled;
+			MusicManager.FogState (fogEnabled);
 		}
 	}
 
