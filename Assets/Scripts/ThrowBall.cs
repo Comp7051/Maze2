@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThrowBall : MonoBehaviour {
 
 	public GameObject ball;
+	public float velocity;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,7 @@ public class ThrowBall : MonoBehaviour {
 		if (Input.GetButtonDown ("Fire1")) {
 			GameObject clone;
 			clone = Instantiate (ball, Camera.main.transform.position, Camera.main.transform.rotation);//, transform.forward);
-			clone.GetComponent<Rigidbody>().velocity = clone.transform.forward * 10;
+			clone.GetComponent<Rigidbody>().velocity = clone.transform.forward * velocity;
 
 		}
 	}
