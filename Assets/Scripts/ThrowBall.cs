@@ -17,7 +17,7 @@ public class ThrowBall : MonoBehaviour {
 			GameObject clone;
 			clone = Instantiate (ball, Camera.main.transform.position, Camera.main.transform.rotation);//, transform.forward);
 			clone.GetComponent<Rigidbody>().velocity = clone.transform.forward * velocity;
-
+			Physics.IgnoreCollision(clone.GetComponent<Collider>(), transform.GetComponent<Collider>());
 		}
 	}
 }
