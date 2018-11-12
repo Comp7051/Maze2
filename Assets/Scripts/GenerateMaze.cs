@@ -16,6 +16,7 @@ public class GenerateMaze : MonoBehaviour
     private GameObject player;
     private GameObject enemy;
     private GameObject win;
+    private GameObject door;
 
     // Use this for initialization
     void Awake()
@@ -23,12 +24,62 @@ public class GenerateMaze : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         win = GameObject.FindGameObjectWithTag("Win");
+        door = GameObject.FindGameObjectWithTag("Door");
 
         GenerateCells();
+
         CreateMaze();
 
-        x = Random.Range(width/2, width);
-        y = Random.Range(height/2, height);
+        PlaceEnemy();
+
+        PlaceDoor();
+    }
+
+    private void PlaceDoor()
+    {
+        GameObject[] cells = GameObject.FindGameObjectsWithTag("Cell");
+
+        int cellnum = Random.Range(0, cells.Length);
+
+        GameObject cell = cells[cellnum];
+
+        Wall[] walls = cell.GetComponentsInChildren<Wall>();
+
+        ArrayList range = new ArrayList();
+        for (int i = 0; i < walls.Length; i++)
+        {
+            if (walls[i].gameObject.GetComponent<MeshRenderer>().enabled)
+            {
+                range.Add(i);
+            }
+        }
+
+        int wallnum = Random.Range(0, range.Count);
+        GameObject cellObject = walls[(int)range[wallnum]].gameObject;
+
+        door.transform.position = new Vector3(cellObject.gameObject.transform.position.x, cellObject.gameObject.transform.position.y - 4, cellObject.gameObject.transform.position.z);
+
+        if (cellObject.name == "East Wall")
+        {
+            door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z + 90);
+        }
+        else if (cellObject.name == "West Wall")
+        {
+            door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z - 90);
+        }
+        else if (cellObject.name == "South Wall")
+        {
+            door.transform.eulerAngles = new Vector3(door.transform.eulerAngles.x, door.transform.eulerAngles.y, door.transform.eulerAngles.z + 180);
+        }
+
+        cellObject.SetActive(false);
+    }
+
+    private void PlaceEnemy()
+    {
+        x = Random.Range(width / 2, width);
+        y = Random.Range(height / 2, height);
+
         enemy.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
     }
 
@@ -36,8 +87,8 @@ public class GenerateMaze : MonoBehaviour
     {
         list = new Stack<Cell>();
 
-        x = Random.Range(0, width/2);
-        y = Random.Range(0, height/2);
+        x = Random.Range(0, width / 2);
+        y = Random.Range(0, height / 2);
 
         player.transform.position = new Vector3(5 + 10 * x, 0, 5 + 10 * y);
 
