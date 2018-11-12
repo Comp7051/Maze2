@@ -19,6 +19,8 @@ public class BallBehavior : MonoBehaviour {
 	void OnCollisionEnter(Collision col) {
 		if (col.gameObject.tag == "Player") {
 		} else if(col.gameObject.tag == "Enemy") {
+			ScoreManager.Score ();
+			Destroy (gameObject);
 		} else {
 			bounce.Play ();
 		}
