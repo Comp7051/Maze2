@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BallMove : MonoBehaviour
 {
@@ -101,7 +102,7 @@ public class BallMove : MonoBehaviour
         // Hide the player win texts
         player1Wins.SetActive(false);
         player2Wins.SetActive(false);
-        // Send ball towards player 1
-        velocity.x = -10;
+        // Go back to maze
+        SceneManager.LoadScene("SampleMaze");
     }
 }
