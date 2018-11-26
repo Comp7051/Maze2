@@ -1,4 +1,4 @@
-﻿// http://www.shaderslab.com/demo-86---adse-phong-per-fragment.html
+// http://www.shaderslab.com/demo-86---adse-phong-per-fragment.html
 
 Shader "Custom/Lighting/BasicLightingPerFragment"
 {
@@ -61,6 +61,7 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
  
                 o.uv = v.texcoord;
  
+				o.viewDir = normalize(UnityWorldSpaceViewDir(o.worldPos));
                 return o;
             }
  
