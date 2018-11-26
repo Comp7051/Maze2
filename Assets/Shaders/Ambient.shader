@@ -118,8 +118,16 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
                 c.rgb *= light.rgb;
  
                 // Compute emission
-                fixed4 emi = tex2D(_EmissionTex, i.uv).r * _EmiColor * _EmiVal;
-                c.rgb += emi.rgb;
+					
+				fixed4 emi = tex2D(_EmissionTex, i.uv).r * _EmiColor * _EmiVal;
+
+				if ((i.worldPos.x >= _WorldSpaceCameraPos.x - 5 && i.worldPos.x <= _WorldSpaceCameraPos.x + 5) &&
+					(i.worldPos.y >= _WorldSpaceCameraPos.y - 5 && i.worldPos.y <= _WorldSpaceCameraPos.y + 5) &&
+					(i.worldPos.z >= _WorldSpaceCameraPos.z - 5 && i.worldPos.z <= _WorldSpaceCameraPos.z + 5)) {
+					emi = tex2D(_EmissionTex, i.uv).r * _EmiColor * _EmiVal + 0.25;
+				}
+
+				c.rgb += emi.rgb;
  
                 return c;
             }
