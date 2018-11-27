@@ -12,23 +12,29 @@ public class RenderManager : MonoBehaviour {
 	Camera playerCamera;
 	public Shader replacementShader;
 	private bool fogEnabled;
+    private int lightEnabled;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		ambientIntensity = ambientIntensityDay;
 		Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
-		playerCamera = Camera.main;
+        Shader.SetGlobalFloat ("_Flashlight", lightEnabled);
+        playerCamera = Camera.main;
 		playerCamera.depthTextureMode = DepthTextureMode.Depth;
 		fogEnabled = false;
-	}
+        lightEnabled = -1;
+    }
 
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyUp(KeyCode.N) || Input.GetKeyUp(KeyCode.Joystick1Button4)) {
-			if (ambientIntensity >= ambientIntensityDay)
+			if (ambientIntensity >= ambientIntensityDay) {
 				ambientIntensity = ambientIntensityNight;
-			else if (ambientIntensity <= ambientIntensityNight)
+				MusicManager.NightState (true);
+			} else if (ambientIntensity <= ambientIntensityNight) {
 				ambientIntensity = ambientIntensityDay;
+				MusicManager.NightState (false);
+			}
 
 			Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
 			RenderSettings.skybox.SetFloat("_Exposure", ambientIntensity);
@@ -36,8 +42,15 @@ public class RenderManager : MonoBehaviour {
 
 		if (Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Joystick1Button5)) {
 			fogEnabled = !fogEnabled;
+			MusicManager.FogState (fogEnabled);
 		}
-	}
+
+        if (Input.GetKeyUp(KeyCode.L) || Input.GetKeyUp(KeyCode.Joystick1Button6))
+        {
+            lightEnabled *= -1;
+            Shader.SetGlobalFloat ("_FlashLight", lightEnabled);
+        }
+    }
 
 	void OnRenderImage (RenderTexture source, RenderTexture destination){
 		// https://docs.unity3d.com/540/Documentation/Manual/WritingImageEffects.html
