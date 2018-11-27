@@ -48,7 +48,7 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
 				float3 viewDir : TEXCOORD3;
             };
  
-			uniform float _FlashLight = -1;
+			uniform float _FlashLight;
 
             v2f vert(appdata_base v)
             {
