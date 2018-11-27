@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
 	private SmoothMouseLook mouseLook;
     private GameObject winScreen;
     private GameObject loseScreen;
+	public AudioSource wallBump;
 
     // Use this for initialization
     void Start()
@@ -63,16 +64,15 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Enemy")
-        {
-            Time.timeScale = 0;
-            loseScreen.SetActive(true);
-        }
-        else if (collision.gameObject.tag == "Win")
-        {
-            Time.timeScale = 0;
-            winScreen.SetActive(true);
-        }
+		if (collision.gameObject.tag == "Enemy") {
+			Time.timeScale = 0;
+			loseScreen.SetActive (true);
+		} else if (collision.gameObject.tag == "Win") {
+			Time.timeScale = 0;
+			winScreen.SetActive (true);
+		} else if (collision.gameObject.tag == "Wall") {
+			wallBump.Play ();
+		}
     }
     
     public void Restart()
