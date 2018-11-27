@@ -45,6 +45,7 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
                 float2 uv : TEXCOORD0;
                 float3 worldPos : TEXCOORD1;
                 float3 worldNormal : TEXCOORD2;
+				float3 viewDir : TEXCOORD3;
             };
  
             v2f vert(appdata_base v)
