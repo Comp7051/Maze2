@@ -18,8 +18,4 @@ public class ScoreManager : MonoBehaviour {
 	public static void Score() {
 		score++;
 	}
-
-	public static int GetScore() {
-		return score;
-	}
 }

@@ -14,6 +14,8 @@ public class PlayerMove : MonoBehaviour
     private GameObject loseScreen;
 	public AudioSource wallBump;
 
+	private GameObject enemy;
+
     // Use this for initialization
     void Start()
     {
@@ -25,21 +27,23 @@ public class PlayerMove : MonoBehaviour
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
 		mouseLook = GetComponent<SmoothMouseLook>();
+
+		enemy = GameObject.FindGameObjectWithTag ("Enemy");
     }
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyUp (KeyCode.F1)) { // Save
+		if (Input.GetKeyUp (KeyCode.F1)) {
 			SaveGame();
 		}
-		if (Input.GetKeyUp (KeyCode.F2)) { // Load
+		if (Input.GetKeyUp (KeyCode.F2)) {
 			LoadGame();
 		}
     }
 
 	void SaveGame() {
-		Debug.Log ("Saving...");
+
 		PlayerPrefs.SetFloat(CombineKeys("player", "position", "x"), gameObject.transform.position.x);
 		PlayerPrefs.SetFloat(CombineKeys("player", "position", "y"), gameObject.transform.position.y);
 		PlayerPrefs.SetFloat(CombineKeys("player", "position", "z"), gameObject.transform.position.z);
@@ -48,10 +52,21 @@ public class PlayerMove : MonoBehaviour
 		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "y"), gameObject.transform.rotation.y);
 		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "z"), gameObject.transform.rotation.z);
 		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "w"), gameObject.transform.rotation.w);
+
+		PlayerPrefs.SetInt(CombineKeys("player", "score", ""), ScoreManager.score);
+
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "position", "x"), enemy.transform.position.x);
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "position", "y"), enemy.transform.position.y);
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "position", "z"), enemy.transform.position.z);
+
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "rotation", "x"), enemy.transform.rotation.x);
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "rotation", "y"), enemy.transform.rotation.y);
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "rotation", "z"), enemy.transform.rotation.z);
+		PlayerPrefs.SetFloat(CombineKeys("enemy", "rotation", "w"), enemy.transform.rotation.w);
 	}
 
 	void LoadGame() {
-		Debug.Log ("Loading...");
+
 		Vector3 position;
 		position.x = SG_GetFloat (CombineKeys("player", "position", "x"), initialPosition.x);
 		position.y = SG_GetFloat (CombineKeys("player", "position", "y"), initialPosition.y);
@@ -64,6 +79,21 @@ public class PlayerMove : MonoBehaviour
 		rotation.w = SG_GetFloat (CombineKeys("player", "rotation", "w"), initialRotation.w);
 
 		gameObject.transform.SetPositionAndRotation (position, rotation);
+
+		ScoreManager.score = SG_GetInt (CombineKeys ("player", "score", ""), 0);
+
+		Vector3 enemyPosition;
+		enemyPosition.x = SG_GetFloat (CombineKeys("enemy", "position", "x"), initialPosition.x);
+		enemyPosition.y = SG_GetFloat (CombineKeys("enemy", "position", "y"), initialPosition.y);
+		enemyPosition.z = SG_GetFloat (CombineKeys("enemy", "position", "z"), initialPosition.z);
+
+		Quaternion enemyRotation;
+		enemyRotation.x = SG_GetFloat (CombineKeys("enemy", "rotation", "x"), initialRotation.x);
+		enemyRotation.y = SG_GetFloat (CombineKeys("enemy", "rotation", "y"), initialRotation.y);
+		enemyRotation.z = SG_GetFloat (CombineKeys("enemy", "rotation", "z"), initialRotation.z);
+		enemyRotation.w = SG_GetFloat (CombineKeys("enemy", "rotation", "w"), initialRotation.w);
+
+		enemy.transform.SetPositionAndRotation (enemyPosition, enemyRotation);
 	}
 
 	// Just to consistently build keys from subkeys. One of these is required, the rest can be blank
@@ -75,6 +105,14 @@ public class PlayerMove : MonoBehaviour
 	float SG_GetFloat(string key, float defaultValue) {
 		if (PlayerPrefs.HasKey (key)) {
 			return PlayerPrefs.GetFloat (key);
+		} else {
+			return defaultValue;
+		}
+	}
+
+	int SG_GetInt(string key, int defaultValue) {
+		if (PlayerPrefs.HasKey (key)) {
+			return PlayerPrefs.GetInt (key);
 		} else {
 			return defaultValue;
 		}
