@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
         {
             if (hit.collider.gameObject.name == "Player") {
                 Debug.DrawRay(transform.position, -transform.up * 9f, Color.red);
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(1) || Input.GetKeyUp(KeyCode.Joystick1Button10))
                 {
                     GetComponent<Animator>().speed = 1;
                 }

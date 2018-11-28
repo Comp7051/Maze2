@@ -23,7 +23,7 @@ Load: F2 and R2
 
 Throw Ball: Mouse Left Click and Square
 
-
+Open door: Mouse Right Click and L3 (when in front of door)
 
 How to win:
 The ending of the maze is represented by a green capsule, touch it to win.
