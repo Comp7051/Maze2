@@ -48,7 +48,7 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
 				float3 viewDir : TEXCOORD3;
             };
  
-			uniform float _FlashLight = -1;
+			uniform float _FlashLight;
 
             v2f vert(appdata_base v)
             {
@@ -121,16 +121,20 @@ Shader "Custom/Lighting/BasicLightingPerFragment"
  
                 c.rgb *= light.rgb;
  
-                // Compute emission
-					
+				
 				half2 divisor = half2(2, 2);
 
+				float length1 = abs(length(i.pos.xy - _ScreenParams.xy / divisor));
+				float ratio = length1 / (_ScreenParams.y / 4);
+
+				//compute flashlight effect
 				if (_FlashLight == 1) {
-					if (abs(length(i.pos.xy - _ScreenParams.xy / divisor)) <= _ScreenParams.y / 4) {
-						_EmiVal += 0.25;
+					if (length1 <= _ScreenParams.y / 4) {
+						_EmiVal += lerp(1, 0, ratio);
 					}
 				}
 
+				// Compute emission	
 				fixed4 emi = tex2D(_EmissionTex, i.uv).r * _EmiColor * _EmiVal;
 
 				c.rgb += emi.rgb;
