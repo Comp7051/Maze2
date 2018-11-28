@@ -18,16 +18,15 @@ public class RenderManager : MonoBehaviour {
     void Start () {
 		ambientIntensity = ambientIntensityDay;
 		Shader.SetGlobalFloat ("_Ambient", ambientIntensity);
-        Shader.SetGlobalFloat ("_Flashlight", lightEnabled);
+        lightEnabled = -1;
         playerCamera = Camera.main;
 		playerCamera.depthTextureMode = DepthTextureMode.Depth;
 		fogEnabled = false;
-        lightEnabled = -1;
     }
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyUp(KeyCode.N) || Input.GetKeyUp(KeyCode.Joystick1Button4)) {
+        if (Input.GetKeyUp(KeyCode.N) || Input.GetKeyUp(KeyCode.Joystick1Button4)) {
 			if (ambientIntensity >= ambientIntensityDay) {
 				ambientIntensity = ambientIntensityNight;
 				MusicManager.NightState (true);
@@ -48,8 +47,8 @@ public class RenderManager : MonoBehaviour {
         if (Input.GetKeyUp(KeyCode.L) || Input.GetKeyUp(KeyCode.Joystick1Button6))
         {
             lightEnabled *= -1;
-            Shader.SetGlobalFloat ("_FlashLight", lightEnabled);
         }
+        Shader.SetGlobalFloat("_FlashLight", lightEnabled);
     }
 
 	void OnRenderImage (RenderTexture source, RenderTexture destination){
