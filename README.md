@@ -13,6 +13,17 @@ Toggle wall colliders: Y and Triangle
 
 Return to Start: Left Home and left dpad
 
+Toggle music: M and Circle
+
+Toggle flashlight: L and L2
+
+Save: F1 and X
+
+Load: F2 and R2
+
+Throw Ball: Mouse Left Click and Square
+
+
 
 How to win:
 The ending of the maze is represented by a green capsule, touch it to win.
