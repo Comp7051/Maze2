@@ -26,6 +26,7 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * -thrust);
         initialPosition = gameObject.transform.position;
+		initialRotation = gameObject.transform.rotation;
 		mouseLook = GetComponent<SmoothMouseLook>();
 
 		enemy = GameObject.FindGameObjectWithTag ("Enemy");
@@ -34,10 +35,10 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyUp (KeyCode.F1)) {
+		if (Input.GetKeyUp (KeyCode.F1) || Input.GetKeyUp(KeyCode.JoystickButton1)) {
 			SaveGame();
 		}
-		if (Input.GetKeyUp (KeyCode.F2)) {
+		if (Input.GetKeyUp (KeyCode.F2) || Input.GetKeyUp(KeyCode.JoystickButton7) ) {
 			LoadGame();
 		}
     }
