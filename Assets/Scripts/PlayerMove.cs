@@ -30,7 +30,55 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (Input.GetKeyUp (KeyCode.F1)) { // Save
+			SaveGame();
+		}
+		if (Input.GetKeyUp (KeyCode.F2)) { // Load
+			LoadGame();
+		}
     }
+
+	void SaveGame() {
+		Debug.Log ("Saving...");
+		PlayerPrefs.SetFloat(CombineKeys("player", "position", "x"), gameObject.transform.position.x);
+		PlayerPrefs.SetFloat(CombineKeys("player", "position", "y"), gameObject.transform.position.y);
+		PlayerPrefs.SetFloat(CombineKeys("player", "position", "z"), gameObject.transform.position.z);
+
+		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "x"), gameObject.transform.rotation.x);
+		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "y"), gameObject.transform.rotation.y);
+		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "z"), gameObject.transform.rotation.z);
+		PlayerPrefs.SetFloat(CombineKeys("player", "rotation", "w"), gameObject.transform.rotation.w);
+	}
+
+	void LoadGame() {
+		Debug.Log ("Loading...");
+		Vector3 position;
+		position.x = SG_GetFloat (CombineKeys("player", "position", "x"), initialPosition.x);
+		position.y = SG_GetFloat (CombineKeys("player", "position", "y"), initialPosition.y);
+		position.z = SG_GetFloat (CombineKeys("player", "position", "z"), initialPosition.z);
+
+		Quaternion rotation;
+		rotation.x = SG_GetFloat (CombineKeys("player", "rotation", "x"), initialRotation.x);
+		rotation.y = SG_GetFloat (CombineKeys("player", "rotation", "y"), initialRotation.y);
+		rotation.z = SG_GetFloat (CombineKeys("player", "rotation", "z"), initialRotation.z);
+		rotation.w = SG_GetFloat (CombineKeys("player", "rotation", "w"), initialRotation.w);
+
+		gameObject.transform.SetPositionAndRotation (position, rotation);
+	}
+
+	// Just to consistently build keys from subkeys. One of these is required, the rest can be blank
+	string CombineKeys(string keyGroup, string key, string subKey)
+	{
+		return keyGroup + key + subKey;
+	}
+
+	float SG_GetFloat(string key, float defaultValue) {
+		if (PlayerPrefs.HasKey (key)) {
+			return PlayerPrefs.GetFloat (key);
+		} else {
+			return defaultValue;
+		}
+	}
 
     void FixedUpdate()
     {
