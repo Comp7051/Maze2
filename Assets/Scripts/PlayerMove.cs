@@ -30,10 +30,10 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyUp (KeyCode.F1)) { // Save
+		if (Input.GetKeyUp (KeyCode.F1) || Input.GetButtonDown ("Fire2")) { // Save
 			SaveGame();
 		}
-		if (Input.GetKeyUp (KeyCode.F2)) { // Load
+		if (Input.GetKeyUp (KeyCode.F2) || Input.GetButtonDown ("Fire1")) { // Load
 			LoadGame();
 		}
     }
